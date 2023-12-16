@@ -1,0 +1,36 @@
+version: '3'
+services:
+  manager1:
+    image: your-manager-image
+    build:
+      context: ./manager
+    depends_on:
+      - worker
+    environment:
+      - MANAGER_ID=1
+
+  manager2:
+    image: your-manager-image
+    build:
+      context: ./manager
+    depends_on:
+      - worker
+    environment:
+      - MANAGER_ID=2
+  manager3:
+    image: your-manager-image
+    build:
+      context: ./manager
+    depends_on:
+      - worker
+    environment:
+      - MANAGER_ID=3      
+
+  worker:
+    image: your-worker-image
+    build:
+      context: ./worker
+    environment:
+      - MANAGER_HOST=manager
+    ports:
+      - "5000:5000"
