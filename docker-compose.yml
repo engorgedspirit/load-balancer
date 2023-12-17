@@ -9,7 +9,7 @@ services:
     environment:
       - DEVICE_ID=1
     ports:
-      - "5051:5002"
+      - "5002:5002"
      
 
   device2:
@@ -21,7 +21,7 @@ services:
     environment:
       - DEVICE_ID=2
     ports:
-      - "5052:5002"
+      - "5002:5002"
 
 
   device3:
@@ -33,7 +33,7 @@ services:
     environment:
       - DEVICE_ID=3      
     ports:
-      - "5053:5002"
+      - "5002:5002"
 
   load_balancer:
     image: load_balancer-image
