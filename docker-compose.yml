@@ -1,36 +1,57 @@
 version: '3'
 services:
-  manager1:
-    image: your-manager-image
+  device1:
+    image: device-image
     build:
-      context: ./manager
+      context: ./device
     depends_on:
-      - worker
+      - load_balancer
     environment:
-      - MANAGER_ID=1
+      - DEVICE_ID=1
+    ports:
+      - "5051:5002"
+     
 
-  manager2:
-    image: your-manager-image
+  device2:
+    image: device-image
     build:
-      context: ./manager
+      context: ./device
     depends_on:
-      - worker
+      - load_balancer
     environment:
-      - MANAGER_ID=2
-  manager3:
-    image: your-manager-image
-    build:
-      context: ./manager
-    depends_on:
-      - worker
-    environment:
-      - MANAGER_ID=3      
+      - DEVICE_ID=2
+    ports:
+      - "5052:5002"
 
-  worker:
-    image: your-worker-image
+
+  device3:
+    image: device-image
     build:
-      context: ./worker
+      context: ./device
+    depends_on:
+      - load_balancer
     environment:
-      - MANAGER_HOST=manager
+      - DEVICE_ID=3      
+    ports:
+      - "5053:5002"
+
+  load_balancer:
+    image: load_balancer-image
+    build:
+      context: ./load_balancer
+    # depends_on:
+    #   - server
+    environment:
+      - DEVICE_HOST=device
     ports:
       - "5000:5000"
+  
+  server:
+    image: server-image
+    build:
+      context: ./server
+    environment:
+      - DEVICE_HOST=load_balancer
+    ports:
+      - "5001:5001"
+    
