@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, make_response
 import time
 import random
 import requests
@@ -10,6 +10,7 @@ def receive_packets():
     time_recieve_serv=time.time()
     process()
     time_sent_serv=time.time()
+    print("Packets at server")
     # quantity = data.get("quantity", 0)
     # timestamp = data.get("timestamp", 0)
     # start_time = time.time()
@@ -23,9 +24,18 @@ def receive_packets():
     #     "round_trip_time": round_trip_time,
     # }
     # return jsonify(confirmation)
+    
+    
     device_id=data.get("device_id")
     packet_id=data.get("packet_id")
-    device_url = "http://"+device_id+":5002"
+    device_url = "http://device1:5002"
+    # device_url = "http://"+device_id+":50"
+    # if device_id=='1':
+    #     device_url=device_url+"51"
+    # elif device_id=='2':
+    #     device_url=device_url+"52"
+    # elif device_id=='3':
+    #     device_url=device_url+"53"
     payload = { "packet_id":data.get("packet_id"),
                 "time_sent_dev": data.get("time_sent_dev"),
                 "device_id":data.get("device_id"),
@@ -34,8 +44,10 @@ def receive_packets():
                 "time_recieve_serv":time_recieve_serv,
                 "time_sent_serv":time_sent_serv
                 }
-    response=requests.post(f"{device_url}/recieve",json=payload)
+    response=requests.post(f"{device_url}/receive",json=payload)
     print(f"Server -> Device {device_id} | Packet : {packet_id}")
+    return make_response('', 200)
+
 
 def process():
     return

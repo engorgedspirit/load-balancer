@@ -3,7 +3,7 @@ import sys
 import requests
 import time
 import random
-from flask import Flask, request, jsonify
+from flask import Flask, request, make_response
 
 app = Flask(__name__)
 
@@ -33,10 +33,10 @@ time.sleep(random.uniform(1, 5))
 @app.route('/receive', methods=['POST'])
 def receive_packets():
     data=request.json
-    div_id=data.device_id
-    pack_id=data.packet_id
+    div_id=data.get("device_id")
+    pack_id=data.get("packet_id")
     print(f"Packet recieved at device {div_id} | Packet: {pack_id}")
-
+    return make_response('', 200)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=50)
+    app.run(host='0.0.0.0', port=5002)

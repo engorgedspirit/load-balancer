@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, make_response
 import time
 import requests
 import sys
@@ -13,7 +13,7 @@ def send_server(data,time_recieve_lb):
                 "time_recieve_lb":time_recieve_lb
                 }
     response = requests.post(f"{server_url}/receive", json=payload)
-    packet_id=payload.packet_id
+    packet_id=payload.get("packet_id")
     # confirmation = {
     #     "received_quantity": response.json().get("received_quantity", 0),
     #     "timestamp_sent": payload["timestamp"],
@@ -30,7 +30,7 @@ def receive_packets():
     time_recieve_lb = time.time()
     send_server(data,time_recieve_lb)
     # time.sleep(random.uniform(1, 3))
-    
+    return make_response('', 200)
     # return jsonify(confirmation)
 
 if __name__ == '__main__':

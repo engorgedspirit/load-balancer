@@ -1,7 +1,7 @@
 version: '3'
 services:
   device1:
-    image: device-image
+    image: device-image-1
     build:
       context: ./device
     depends_on:
@@ -9,11 +9,13 @@ services:
     environment:
       - DEVICE_ID=1
     ports:
-      - "5002:5002"
+      - "5051:5002"
+    volumes:
+      - ./device:/app
      
 
   device2:
-    image: device-image
+    image: device-image-2
     build:
       context: ./device
     depends_on:
@@ -21,11 +23,12 @@ services:
     environment:
       - DEVICE_ID=2
     ports:
-      - "5002:5002"
-
+      - "5052:5002"
+    volumes:
+      - ./device:/app
 
   device3:
-    image: device-image
+    image: device-image-3
     build:
       context: ./device
     depends_on:
@@ -33,19 +36,23 @@ services:
     environment:
       - DEVICE_ID=3      
     ports:
-      - "5002:5002"
+      - "5053:5002"
+    volumes:
+      - ./device:/app
 
   load_balancer:
     image: load_balancer-image
     build:
       context: ./load_balancer
-    # depends_on:
-    #   - server
+    depends_on:
+      - server
     environment:
       - DEVICE_HOST=device
     ports:
       - "5000:5000"
-  
+    volumes:
+      - ./load_balancer:/app
+
   server:
     image: server-image
     build:
@@ -54,4 +61,5 @@ services:
       - DEVICE_HOST=load_balancer
     ports:
       - "5001:5001"
-    
+    volumes:
+      - ./server:/app    
